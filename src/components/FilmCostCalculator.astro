@@ -1,0 +1,503 @@
+---
+import { formatFromUsd, formatMoney } from '../utils/currency';
+
+/**
+ * Interactive per-roll / per-keeper film cost calculator.
+ * State is held in CNY; display follows the page currency set by CurrencyToggle.
+ * Every value is draggable on the slider or typeable in the number field.
+ */
+
+interface Row {
+	name: string;
+	label: string;
+	min: number;
+	max: number;
+	value: number;
+	money: boolean;
+	suffix?: string;
+}
+
+const rows: Row[] = [
+	{ name: 'film', label: 'Film, per roll', min: 0, max: 200, value: 80, money: true },
+	{ name: 'dev', label: 'Develop + scan', min: 0, max: 250, value: 20, money: true },
+	{ name: 'ship', label: 'Shipping, per roll', min: 0, max: 60, value: 6, money: true },
+	{ name: 'frames', label: 'Frames per roll', min: 8, max: 40, value: 36, money: false },
+	{ name: 'keepers', label: 'Keepers per roll', min: 1, max: 40, value: 10, money: false },
+	{ name: 'rolls', label: 'Rolls per year', min: 1, max: 100, value: 20, money: false, suffix: 'a year' },
+];
+
+/** Develop + scan prices quoted in this post, for the comparison bars. */
+const labs = [
+	{ label: 'My lab, Shanghai', cny: 20 },
+	{ label: 'Hasselblad scans, Shanghai', cny: 68 },
+	{ label: 'Osaka', cny: 88 },
+	{ label: 'Oslo, cheapest', cny: 136 },
+	{ label: 'Portland', cny: 195 },
+];
+
+const defaults = Object.fromEntries(rows.map((r) => [r.name, r.value]));
+const barMax = Math.max(...labs.map((l) => l.cny), 20);
+---
+
+<div class="calc" id="film-calc" data-defaults={JSON.stringify(defaults)}>
+	<div class="calc-head">
+		<h4>What does it cost you?</h4>
+		<button type="button" id="calc-reset">Reset to my numbers</button>
+	</div>
+	<p class="hint">Drag a slider, or click a number and type your own.</p>
+
+	<div class="controls">
+		{rows.map((r) => (
+			<div class="control">
+				<label for={`calc-${r.name}`}>{r.label}</label>
+				<span class="field">
+					{r.money && <span class="sym" data-sym>¥</span>}
+					<input
+						class="num-in"
+						type="text"
+						inputmode="decimal"
+						autocomplete="off"
+						spellcheck="false"
+						data-num={r.name}
+						data-money={r.money ? 'true' : 'false'}
+						value={r.value}
+						aria-label={r.label}
+					/>
+					{r.suffix && <span class="sfx">{r.suffix}</span>}
+				</span>
+				<input
+					type="range"
+					id={`calc-${r.name}`}
+					name={r.name}
+					min={r.min}
+					max={r.max}
+					step="1"
+					value={r.value}
+					data-orig-max={r.max}
+					aria-label={`${r.label} slider`}
+				/>
+			</div>
+		))}
+	</div>
+
+	<div class="results">
+		<div class="result">
+			<span class="num" data-out="perRoll" data-cny="106">{formatMoney(106, 'CNY')}</span>
+			<span class="cap">a roll</span>
+		</div>
+		<div class="result">
+			<span class="num" data-out="perFrame" data-cny="2.94">{formatMoney(2.94, 'CNY')}</span>
+			<span class="cap">a frame</span>
+		</div>
+		<div class="result">
+			<span class="num" data-out="perKeeper" data-cny="10.6">{formatMoney(10.6, 'CNY')}</span>
+			<span class="cap">a keeper</span>
+		</div>
+		<div class="result">
+			<span class="num" data-out="perYear" data-cny="2120">{formatMoney(2120, 'CNY')}</span>
+			<span class="cap">a year</span>
+		</div>
+	</div>
+
+	<div class="bars">
+		<p class="bars-title">Your develop + scan, against the labs in this post</p>
+		<div class="bar-row you">
+			<span class="bar-label">You</span>
+			<span class="bar-track"><span class="bar-fill" data-bar="you" style={`width:${(20 / barMax) * 100}%`}></span></span>
+			<span class="bar-val" data-out="devBar" data-cny="20">{formatMoney(20, 'CNY')}</span>
+		</div>
+		{labs.map((l) => (
+			<div class="bar-row">
+				<span class="bar-label">{l.label}</span>
+				<span class="bar-track">
+					<span class="bar-fill" data-bar={String(l.cny)} style={`width:${(l.cny / barMax) * 100}%`}></span>
+				</span>
+				<span class="bar-val" data-cny={l.cny}>{formatMoney(l.cny, 'CNY')}</span>
+			</div>
+		))}
+	</div>
+
+	<ul class="lines">
+		<li>
+			<strong data-plain="frames">720</strong> frames a year, <strong data-plain="keeps">200</strong> of them worth keeping.
+		</li>
+		<li>
+			A roll is <strong data-plain="teaRoll">5.3</strong> cups of milk tea at <span data-cny="20">{formatMoney(20, 'CNY')}</span> a cup.
+			Every photo you'd actually post costs <strong data-plain="teaKeeper">0.5</strong> of a cup.
+		</li>
+		<li>
+			<strong data-out="perMonth" data-cny="177">{formatMoney(177, 'CNY')}</strong> a month, which is
+			<strong data-plain="subs">26%</strong> of the <span data-usd="100">{formatFromUsd(100, 'CNY')}</span> AI
+			subscription I don't think twice about.
+		</li>
+		<li>
+			A disposable is <span data-cny="130">{formatMoney(130, 'CNY')}</span> for 27 frames, so
+			<span data-cny="4.81">{formatMoney(4.81, 'CNY')}</span> a shot. You're
+			<strong data-plain="dispo">39% under that</strong>.
+		</li>
+		<li>
+			A <span data-cny="7500">{formatMoney(7500, 'CNY')}</span> body shedding <span data-cny="1750">{formatMoney(1750, 'CNY')}</span> a year
+			in a drawer burns <strong data-plain="breakeven">16.5 rolls</strong> of your film annually for nothing, and its sticker price is
+			<strong data-plain="years">3.5 years</strong> of your shooting.
+		</li>
+	</ul>
+</div>
+
+<script>
+	import { CNY_PER_USD, formatMoney, formatNumber, formatRatio, usdToCny, type Currency } from '../utils/currency';
+
+	const calc = document.getElementById('film-calc');
+
+	if (calc) {
+		const MILK_TEA = 20;
+		const AI_SUB = usdToCny(100); // Claude Max 5x, natively a dollar price
+		const DISPOSABLE = 130;
+		const DISPOSABLE_FRAMES = 27;
+		const DEPRECIATION = 1750;
+		const SONY = 7500;
+
+		const sliders = Array.from(calc.querySelectorAll<HTMLInputElement>('input[type="range"]'));
+		const fields = Array.from(calc.querySelectorAll<HTMLInputElement>('.num-in'));
+		const defaults: Record<string, number> = JSON.parse(calc.dataset.defaults ?? '{}');
+		const state: Record<string, number> = { ...defaults };
+		const isMoney: Record<string, boolean> = {};
+		for (const f of fields) isMoney[f.dataset.num!] = f.dataset.money === 'true';
+
+		const currency = (): Currency =>
+			document.documentElement.dataset.currency === 'USD' ? 'USD' : 'CNY';
+
+		/** Value as the reader sees it, in the active currency, without a symbol. */
+		function displayValue(name: string): string {
+			const v = state[name];
+			if (!isMoney[name]) return String(v);
+			return formatNumber(currency() === 'USD' ? v / CNY_PER_USD : v).replace(/,/g, '');
+		}
+
+		function plural(n: number, word: string): string {
+			const shown = formatRatio(n);
+			return `${shown} ${word}${shown === '1' ? '' : 's'}`;
+		}
+
+		function setMoney(key: string, cny: number) {
+			const el = calc!.querySelector<HTMLElement>(`[data-out="${key}"]`);
+			if (!el) return;
+			el.dataset.cny = String(cny);
+			el.textContent = formatMoney(cny, currency());
+		}
+
+		function setPlain(key: string, text: string) {
+			const el = calc!.querySelector<HTMLElement>(`[data-plain="${key}"]`);
+			if (el) el.textContent = text;
+		}
+
+		function sizeField(f: HTMLInputElement) {
+			f.style.width = Math.max(2, f.value.length + 0.5) + 'ch';
+		}
+
+		/** Push state into every control, skipping the field being typed in. */
+		function syncControls(skip?: Element | null) {
+			for (const s of sliders) {
+				const name = s.name;
+				if (state[name] > Number(s.max)) s.max = String(Math.ceil(state[name]));
+				s.value = String(state[name]);
+			}
+			for (const f of fields) {
+				if (f === skip) continue;
+				f.value = displayValue(f.dataset.num!);
+				sizeField(f);
+			}
+			for (const sym of calc!.querySelectorAll<HTMLElement>('[data-sym]')) {
+				sym.textContent = currency() === 'USD' ? '$' : '¥';
+			}
+		}
+
+		function render(skip?: Element | null) {
+			syncControls(skip);
+
+			const perRoll = state.film + state.dev + state.ship;
+			const perYear = perRoll * state.rolls;
+			const perMonth = perYear / 12;
+			const keepers = Math.min(state.keepers, state.frames);
+			const perFrame = state.frames > 0 ? perRoll / state.frames : 0;
+			const perKeeper = keepers > 0 ? perRoll / keepers : 0;
+
+			setMoney('perRoll', perRoll);
+			setMoney('perFrame', perFrame);
+			setMoney('perKeeper', perKeeper);
+			setMoney('perYear', perYear);
+			setMoney('perMonth', perMonth);
+			setMoney('devBar', state.dev);
+
+			// Comparison bars rescale around whichever lab (or you) is most expensive.
+			const bars = Array.from(calc!.querySelectorAll<HTMLElement>('[data-bar]'));
+			const max = Math.max(state.dev, ...bars.map((b) => Number(b.dataset.bar) || 0), 1);
+			for (const b of bars) {
+				const v = b.dataset.bar === 'you' ? state.dev : Number(b.dataset.bar);
+				b.style.width = (v / max) * 100 + '%';
+			}
+
+			const disposableFrame = DISPOSABLE / DISPOSABLE_FRAMES;
+			const gap = Math.round(((disposableFrame - perFrame) / disposableFrame) * 100);
+
+			setPlain('frames', formatNumber(state.frames * state.rolls));
+			setPlain('keeps', formatNumber(keepers * state.rolls));
+			setPlain('teaRoll', formatRatio(perRoll / MILK_TEA));
+			setPlain('teaKeeper', formatRatio(perKeeper / MILK_TEA));
+			setPlain('subs', Math.round((perMonth / AI_SUB) * 100) + '%');
+			setPlain(
+				'dispo',
+				gap === 0 ? 'level with it' : gap > 0 ? `${gap}% under that` : `${Math.abs(gap)}% over it`,
+			);
+			setPlain('breakeven', perRoll > 0 ? plural(DEPRECIATION / perRoll, 'roll') : 'endless rolls');
+			setPlain('years', perYear > 0 ? plural(SONY / perYear, 'year') : 'forever');
+		}
+
+		for (const s of sliders) {
+			s.addEventListener('input', () => {
+				state[s.name] = Number(s.value);
+				render();
+			});
+		}
+
+		function commit(f: HTMLInputElement, skipSelf: boolean) {
+			const name = f.dataset.num!;
+			const parsed = parseFloat(f.value.replace(/[^0-9.]/g, ''));
+			if (!Number.isFinite(parsed)) return;
+
+			let v = isMoney[name] && currency() === 'USD' ? parsed * CNY_PER_USD : parsed;
+			if (!isMoney[name]) v = Math.round(v);
+
+			const slider = sliders.find((s) => s.name === name)!;
+			v = Math.max(Number(slider.min), v);
+
+			state[name] = v;
+			render(skipSelf ? f : null);
+		}
+
+		for (const f of fields) {
+			let onFocus = '';
+			f.addEventListener('focus', () => { onFocus = f.value; f.select(); });
+			f.addEventListener('input', () => {
+				sizeField(f);
+				commit(f, true);
+			});
+			f.addEventListener('blur', () => {
+				// Untouched, or left empty/unparseable: restore rather than drift the value.
+				if (f.value === onFocus || !Number.isFinite(parseFloat(f.value.replace(/[^0-9.]/g, '')))) {
+					render();
+					return;
+				}
+				commit(f, false);
+			});
+			f.addEventListener('keydown', (e) => {
+				if (e.key === 'Enter') { e.preventDefault(); f.blur(); }
+				if (e.key === 'Escape') { f.value = displayValue(f.dataset.num!); f.blur(); }
+			});
+		}
+
+		document.addEventListener('currencychange', () => render());
+
+		document.getElementById('calc-reset')?.addEventListener('click', () => {
+			Object.assign(state, defaults);
+			for (const s of sliders) s.max = s.dataset.origMax ?? s.max;
+			render();
+		});
+
+		render();
+	}
+</script>
+
+<style>
+	.calc {
+		margin: 2.25rem 0;
+		padding: 1.25rem 1.25rem 1.1rem;
+		border: 1px solid var(--border);
+		background: var(--surface);
+	}
+	.calc-head {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 1rem;
+	}
+	.calc-head h4 {
+		margin: 0;
+		font-family: var(--font-serif);
+		font-size: 1.1rem;
+	}
+	#calc-reset {
+		flex-shrink: 0;
+		padding: 0;
+		background: none;
+		border: none;
+		color: var(--text-secondary);
+		font-family: inherit;
+		font-size: 0.75rem;
+		cursor: pointer;
+		opacity: 0.6;
+		transition: opacity 0.15s, color 0.15s;
+	}
+	#calc-reset:hover { opacity: 1; color: var(--text); }
+	.hint {
+		margin: 0.2rem 0 1rem;
+		padding-bottom: 0.85rem;
+		border-bottom: 1px solid var(--border);
+		font-size: 0.75rem;
+		color: var(--text-secondary);
+		opacity: 0.6;
+	}
+
+	.controls {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 0.85rem 1.5rem;
+	}
+	.control {
+		display: grid;
+		grid-template-columns: 1fr auto;
+		align-items: baseline;
+		gap: 0.25rem 0.5rem;
+	}
+	.control label {
+		font-size: 0.8rem;
+		color: var(--text-secondary);
+	}
+	.field {
+		display: inline-flex;
+		align-items: baseline;
+		font-family: var(--font-mono);
+		font-size: 0.82rem;
+		color: var(--text);
+	}
+	.sym { opacity: 0.55; }
+	.sfx {
+		margin-left: 0.3rem;
+		font-size: 0.72rem;
+		color: var(--text-secondary);
+		opacity: 0.6;
+	}
+	.num-in {
+		width: 3ch;
+		padding: 0 0 1px;
+		background: none;
+		border: none;
+		border-bottom: 1px dotted var(--text-secondary);
+		color: inherit;
+		font: inherit;
+		text-align: right;
+		font-variant-numeric: tabular-nums;
+		cursor: text;
+		transition: border-color 0.15s, color 0.15s;
+	}
+	.num-in:hover { border-bottom-color: var(--link); }
+	.num-in:focus {
+		outline: none;
+		color: var(--link);
+		border-bottom: 1px solid var(--link);
+	}
+	.control input[type="range"] {
+		grid-column: 1 / -1;
+		width: 100%;
+		margin: 0.15rem 0 0;
+		accent-color: var(--link);
+		cursor: pointer;
+	}
+
+	.results {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: 0.5rem;
+		margin-top: 1.3rem;
+		padding-top: 1.1rem;
+		border-top: 1px solid var(--border);
+	}
+	.result { display: flex; flex-direction: column; }
+	.num {
+		font-family: var(--font-mono);
+		font-size: 1.15rem;
+		line-height: 1.3;
+		color: var(--text);
+		font-variant-numeric: tabular-nums;
+	}
+	.cap {
+		font-size: 0.72rem;
+		color: var(--text-secondary);
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+		opacity: 0.7;
+	}
+
+	.bars {
+		margin-top: 1.2rem;
+		padding-top: 1.1rem;
+		border-top: 1px solid var(--border);
+	}
+	.bars-title {
+		margin: 0 0 0.7rem;
+		font-size: 0.72rem;
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+		color: var(--text-secondary);
+		opacity: 0.7;
+	}
+	.bar-row {
+		display: grid;
+		grid-template-columns: 11rem 1fr 4.5rem;
+		align-items: center;
+		gap: 0.6rem;
+		margin-bottom: 0.35rem;
+	}
+	.bar-label {
+		font-size: 0.78rem;
+		color: var(--text-secondary);
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+	.bar-track {
+		height: 6px;
+		background: rgba(255,255,255,0.05);
+		overflow: hidden;
+	}
+	.bar-fill {
+		display: block;
+		height: 100%;
+		width: 0;
+		background: var(--text-secondary);
+		opacity: 0.5;
+		transition: width 0.18s ease;
+	}
+	.bar-val {
+		font-family: var(--font-mono);
+		font-size: 0.76rem;
+		color: var(--text-secondary);
+		text-align: right;
+		font-variant-numeric: tabular-nums;
+	}
+	.bar-row.you .bar-label,
+	.bar-row.you .bar-val { color: var(--text); }
+	.bar-row.you .bar-fill { background: var(--link); opacity: 1; }
+
+	.lines {
+		margin: 1.1rem 0 0;
+		padding: 0.9rem 0 0 1.1rem;
+		border-top: 1px solid var(--border);
+		font-size: 0.85rem;
+		color: var(--text-secondary);
+		line-height: 1.65;
+	}
+	.lines li { margin-bottom: 0.2rem; }
+	.lines strong,
+	.lines span { color: var(--text); font-weight: 400; font-variant-numeric: tabular-nums; }
+
+	@media (max-width: 600px) {
+		.controls { grid-template-columns: 1fr; }
+		.results { grid-template-columns: 1fr 1fr; gap: 0.9rem 0.5rem; }
+		.bar-row { grid-template-columns: 8.5rem 1fr 4rem; }
+		.bar-label { font-size: 0.74rem; }
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.bar-fill { transition: none; }
+	}
+</style>
