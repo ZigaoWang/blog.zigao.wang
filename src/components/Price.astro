@@ -1,0 +1,38 @@
+---
+import { formatFromUsd, formatMoney } from '../utils/currency';
+
+interface Props {
+	/** Amount natively priced in CNY. */
+	cny?: number;
+	/** Amount natively priced in USD (a subscription, say), so the dollar figure stays exact. */
+	usd?: number;
+}
+
+const { cny, usd } = Astro.props;
+
+if (cny === undefined && usd === undefined) {
+	throw new Error('<Price> needs either a cny or a usd prop.');
+}
+
+const text = usd !== undefined ? formatFromUsd(usd, 'CNY') : formatMoney(cny!, 'CNY');
+---
+
+<span class="price" data-cny={usd === undefined ? cny : undefined} data-usd={usd}>{text}</span>
+
+<style>
+	.price {
+		font-variant-numeric: tabular-nums;
+		border-bottom: 1px dotted var(--text-secondary);
+		white-space: nowrap;
+	}
+	:global(.price.flash) {
+		animation: price-flash 0.6s ease-out;
+	}
+	@keyframes price-flash {
+		0% { background: rgba(147, 180, 245, 0.22); }
+		100% { background: transparent; }
+	}
+	@media (prefers-reduced-motion: reduce) {
+		:global(.price.flash) { animation: none; }
+	}
+</style>

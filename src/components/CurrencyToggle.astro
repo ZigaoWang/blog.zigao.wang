@@ -1,0 +1,119 @@
+---
+import { CNY_PER_USD } from '../utils/currency';
+
+interface Props {
+	/** Optional line shown under the switch. */
+	note?: string;
+}
+
+const { note } = Astro.props;
+const cnyNote = note ?? 'switch to see rough USD';
+const usdNote = `approximate, at ¥${CNY_PER_USD} to $1`;
+---
+
+<div class="currency-toggle" id="currency-toggle">
+	<span class="label">Prices in</span>
+	<div class="switch" role="group" aria-label="Currency">
+		<button type="button" data-currency="CNY" class="active" aria-pressed="true">¥ CNY</button>
+		<button type="button" data-currency="USD" aria-pressed="false">$ USD</button>
+	</div>
+	<span class="note" id="currency-note" data-cny-note={cnyNote} data-usd-note={usdNote}>{cnyNote}</span>
+</div>
+
+<script>
+	import { formatFromUsd, formatMoney, STORAGE_KEY, type Currency } from '../utils/currency';
+
+	const toggle = document.getElementById('currency-toggle');
+
+	if (toggle) {
+		const buttons = toggle.querySelectorAll<HTMLButtonElement>('button[data-currency]');
+		const note = document.getElementById('currency-note');
+
+		function apply(currency: Currency, animate: boolean) {
+			document.documentElement.dataset.currency = currency;
+
+			for (const el of document.querySelectorAll<HTMLElement>('[data-cny], [data-usd]')) {
+				const native = el.dataset.usd !== undefined ? 'USD' : 'CNY';
+				const value = Number(native === 'USD' ? el.dataset.usd : el.dataset.cny);
+				if (Number.isNaN(value)) continue;
+				el.textContent =
+					native === 'USD' ? formatFromUsd(value, currency) : formatMoney(value, currency);
+				if (animate && el.classList.contains('price')) {
+					el.classList.remove('flash');
+					void el.offsetWidth; // restart the animation
+					el.classList.add('flash');
+				}
+			}
+
+			for (const b of buttons) {
+				const on = b.dataset.currency === currency;
+				b.classList.toggle('active', on);
+				b.setAttribute('aria-pressed', String(on));
+			}
+
+			if (note) {
+				note.textContent = (currency === 'USD' ? note.dataset.usdNote : note.dataset.cnyNote) ?? '';
+			}
+
+			document.dispatchEvent(new CustomEvent('currencychange', { detail: currency }));
+		}
+
+		let saved: string | null = null;
+		try { saved = localStorage.getItem(STORAGE_KEY); } catch {}
+		apply(saved === 'USD' ? 'USD' : 'CNY', false);
+
+		for (const b of buttons) {
+			b.addEventListener('click', () => {
+				const currency = (b.dataset.currency === 'USD' ? 'USD' : 'CNY') as Currency;
+				apply(currency, true);
+				try { localStorage.setItem(STORAGE_KEY, currency); } catch {}
+			});
+		}
+	}
+</script>
+
+<style>
+	.currency-toggle {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 0.6rem;
+		margin: 1.5rem 0 2rem;
+		padding: 0.7rem 0.9rem;
+		border: 1px solid var(--border);
+		background: var(--surface);
+	}
+	.label {
+		font-size: 0.82rem;
+		color: var(--text-secondary);
+	}
+	.switch {
+		display: inline-flex;
+		border: 1px solid var(--border);
+	}
+	.switch button {
+		padding: 0.28rem 0.7rem;
+		background: none;
+		border: none;
+		color: var(--text-secondary);
+		font-family: var(--font-mono);
+		font-size: 0.78rem;
+		cursor: pointer;
+		transition: background 0.15s, color 0.15s;
+	}
+	.switch button + button { border-left: 1px solid var(--border); }
+	.switch button:hover { color: var(--text); }
+	.switch button.active {
+		background: var(--surface-hover);
+		color: var(--text);
+	}
+	.note {
+		font-size: 0.75rem;
+		color: var(--text-secondary);
+		opacity: 0.65;
+		font-style: italic;
+	}
+	@media (max-width: 420px) {
+		.note { flex-basis: 100%; }
+	}
+</style>
