@@ -1,0 +1,221 @@
+---
+title: "Why I shoot 35mm film"
+description: "When someone asks why I shoot film, I send them this. What a roll actually costs me in Shanghai, why the film internet quotes numbers five to ten times mine, and the real reason I shoot it, which turns out to have nothing to do with money. There's a calculator so you can run your own."
+pubDate: '2026-08-22'
+heroImage: '../../assets/why-i-shoot-35mm-film/why-i-shoot-35mm-film-cover.jpg'
+category: 'Life'
+tags: ['film', 'photography', 'shanghai', 'money']
+---
+
+import CurrencyToggle from '../../components/CurrencyToggle.astro';
+import Figure from '../../components/Figure.astro';
+import portraImg from '../../assets/why-i-shoot-35mm-film/IMG_5619.avif';
+import firstRollImg from '../../assets/why-i-shoot-35mm-film/IMG_4027.avif';
+import shangwenImg from '../../assets/why-i-shoot-35mm-film/IMG_5511.avif';
+import respooledImg from '../../assets/why-i-shoot-35mm-film/IMG_1865.avif';
+import osakaSignImg from '../../assets/why-i-shoot-35mm-film/IMG_5555.avif';
+import yodobashiImg from '../../assets/why-i-shoot-35mm-film/IMG_5552.avif';
+import klShopImg from '../../assets/why-i-shoot-35mm-film/IMG_9572.avif';
+import wukangImg from '../../assets/why-i-shoot-35mm-film/IMG_4024.avif';
+import snapicImg from '../../assets/why-i-shoot-35mm-film/IMG_6429.avif';
+import tripImg from '../../assets/why-i-shoot-35mm-film/IMG_1908.avif';
+import kyotoImg from '../../assets/why-i-shoot-35mm-film/IMG_6195.avif';
+import FilmCostCalculator from '../../components/FilmCostCalculator.astro';
+import Price from '../../components/Price.astro';
+
+<CurrencyToggle />
+
+Whenever someone notices the camera and asks if it's real film, there's a pause and then some version of "you must be rich." Every photo costs money, right?
+
+The funny part is that the most expensive camera I own is digital. It cost <Price cny={7500} /> and I haven't touched it in over a year. The camera in my bag right now cost <Price cny={70} />.
+
+So I sat down and worked out what film actually costs me, because I'd never checked. The short answer is that it's cheap, mostly because of where I live. But cost turned out to be the least interesting part, and the reason I actually shoot film only became obvious once I'd figured out why I stopped shooting digital.
+
+## What a roll costs
+
+My lab charges <Price cny={20} /> to develop and scan a roll of 35mm color. Shipping is <Price cny={6} /> a parcel.
+
+The film itself is the variable. Kodak Gold is around <Price cny={60} />, UltraMax <Price cny={78} />, and the US-made Fujifilm 400 also <Price cny={78} />. Most of what I buy sits between <Price cny={65} /> and <Price cny={75} />. The cheapest thing I've bought is Harman Phoenix II at <Price cny={49} />, which I gave two chances and didn't like either time. The latitude is bad and the colors came out ugly, though I'll admit some of that could be my metering. I wrote up [what I thought of it here](https://avoidxray.com/films/harman-phoenix-ii-200).
+
+<Figure src={firstRollImg} alt="A Canon AE-1 Program on a table with a roll of Kodak UltraMax 400 held in front of it" caption="The very first roll I ever took out of the AE-1P. UltraMax 400, and I had no idea what I was doing — it was the first time I'd rewound a roll and got it out of the camera, going off a YouTube video." />
+
+At the other end I've paid <Price cny={138} /> for Superia and <Price cny={148} /> for both CineStill 800T and Portra 800. I buy the expensive stuff partly to try new things and partly because I'm adding stocks to AvoidXray and can't write about a film I haven't shot. Portra is the one I keep going back and forth on. It's built for people who edit, so the colors come out flat and it just holds detail for you to push around later, which is exactly the workflow I don't have. I also underexposed half that roll, so I can't fully blame the film.
+
+<Figure src={portraImg} alt="A canister of Kodak Portra 800 held above a Canon AE-1 Program resting on a lap" caption="The Portra 800 in question, about to go into the AE-1P somewhere in Japan." />
+
+Averaged across everything that actually goes through my cameras, <Price cny={80} /> is about right. So:
+
+**<Price cny={80} /> for film, <Price cny={20} /> to develop and scan, <Price cny={6} /> to ship. <Price cny={106} /> a roll, or <Price cny={2.94} /> a frame.**
+
+Except I don't keep 36 photos. On a good roll there are maybe ten I like, so the number that matters is **about <Price cny={10.6} /> per photo I'd actually post**. Milk tea in Shanghai is around <Price cny={20} /> a cup, so that's half a cup per photo and five cups per roll.
+
+Twenty rolls a year comes to <Price cny={2120} />, or roughly <Price cny={177} /> a month. I'm a student and I don't earn money, so that isn't nothing and I do think about it. But it's about what a streaming subscription and a couple of coffees costs, and it's the only hobby I have that reliably gets me outside and hands me two hundred photographs a year.
+
+<FilmCostCalculator />
+
+## Why it's this cheap, and why that's a Shanghai thing
+
+Almost none of that number is me being clever.
+
+There's a shop here called 上文 (Shangwen) with a ridiculous amount of stock.
+
+<Figure
+	src={shangwenImg}
+	alt="Glass shelves at a Shanghai film shop packed with Kodak, Fuji and Foma boxes, price tags in yuan"
+>
+	<Fragment slot="caption">
+		上文. Most of that wall is priced between <Price cny={45} /> and <Price cny={85} />, and there are movie film cans stacked on the top shelf.
+	</Fragment>
+</Figure>
+
+A lot of the interesting stuff is motion picture film that Chinese companies respool into 35mm cassettes, which is how stocks that are basically unfindable elsewhere end up just sitting there at <Price cny={45} /> a roll.
+
+<Figure src={respooledImg} alt="Shelves of respooled motion picture film in small Chinese-brand boxes, a customer with a medium format camera on his hip in the corner of the frame" caption="Respooled 5203 and 5207 and a dozen small brands I'd never heard of. The guy who wandered into the left of the frame is carrying the medium format camera I keep telling myself I don't need yet." />
+
+When the shop runs out of something, Taobao fills the gap in two days, anywhere in the country, with shipping that costs almost nothing.
+
+The lab is in Shanghai too. I could go in person and have scans in two hours, but I don't bother. I ship it for <Price cny={6} />, the parcel travels overnight, they develop and scan that afternoon, and the files are on my phone the same day.
+
+Expensive labs exist here as well. There's one charging <Price cny={68} /> a roll that scans on a Hasselblad with someone actually sitting there fine-tuning each frame, which is a real premium service rather than the same thing marked up. It just isn't what most people choose. My lab's storefront shows over ten thousand orders in 2026 alone, and that's one shop, with places charging about the same in cities all over the country. Twenty yuan isn't a secret corner of the market. Twenty yuan is the normal price.
+
+Compare that to what people elsewhere pay. Someone in Portland is on about <Price cny={195} /> a roll. A guy in Oslo pays around <Price cny={330} /> for one roll of 120, and his lab's cheapest 35mm option is still <Price cny={136} />. I pulled those from [an r/AnalogCommunity thread](https://www.reddit.com/r/AnalogCommunity/comments/1nuxph2/how_much_are_you_paying_for_developing/) where people listed their local prices, and the gap is not subtle.
+
+I've also just seen it myself. I kept assuming film would be cheap in Japan, because Fujifilm is Japanese, and it never is.
+
+<Figure
+	src={osakaSignImg}
+	alt="A shop sign in Japan reading 現像 Film Development 950 yen and スマホ転送 Scan by QR code 880 yen"
+>
+	<Fragment slot="caption">
+		A shop in Osaka: 950 yen to develop, 880 yen to scan. That's 1,830 yen for one roll, about <Price cny={88} />, against the <Price cny={20} /> I pay at home.
+	</Fragment>
+</Figure>
+
+<Figure
+	src={yodobashiImg}
+	alt="The film corner at a Yodobashi Camera store, shelves of Kodak and Fuji boxes with yen price tags"
+>
+	<Fragment slot="caption">
+		Yodobashi's film corner. Single rolls of Gold, UltraMax and ColorPlus were tagged between roughly 1,900 and 2,400 yen, so <Price cny={90} /> to <Price cny={115} />. I pay <Price cny={52} /> to <Price cny={78} /> for the same films.
+	</Fragment>
+</Figure>
+
+Kuala Lumpur was the same story from a different angle. Everything in the cabinet was expensive, and Harman Phoenix II, the roll I buy at home for <Price cny={49} /> and don't even like, was <Price cny={112} />.
+
+<Figure src={klShopImg} alt="A small camera shop in Kuala Lumpur with glass cabinets full of compact cameras and film" caption="A camera shop in KL. Lovely place, brutal prices." />
+
+The one honest caveat is that this isn't unique to China. Korea is right there with me, around <Price cny={20} /> to <Price cny={41} /> a roll with 6000x4000 scans as standard. So it's really an East Asia thing, and most of the English language film internet is written by people paying five to ten times what I do. When they say film is expensive they're telling the truth about their life, not about film.
+
+Which is also why almost nobody here develops at home. On Reddit that's the top answer to everything: can't afford the lab, so I do it myself. Makes complete sense at <Price cny={195} /> a roll. At <Price cny={20} /> it falls apart, especially since developing is only half of it. You still have to scan, which means a film scanner or a digital camera with a macro lens and a copy stand. Buying a digital camera to avoid paying for film is a funny place to end up.
+
+Prices are rising here too. I don't study economics so treat this as a guess, but it looks like plain supply and demand: a lot more people picked up film and almost no new production appeared to meet them, because coating film is hard and expensive and restarting a line is a huge bet on demand that might not last. Which is why I'm happy about Lucky building their own new color line. C200 came out a while back and C400 arrived recently, and there's a roll of it in my pocket camera in Macau as I write this.
+
+## The cameras are the real bill
+
+Everyone fixates on the per roll cost because it keeps coming back. But bodies are the bigger number, and mine are what changed my mind about all of this.
+
+Most people who shoot film shoot a point and shoot, and that's the right call. Nothing to learn, fits in a pocket, photos look like film. In China you'd buy one on 闲鱼 (Xianyu), the giant secondhand marketplace, basically eBay or Facebook Marketplace. An entry level point and shoot runs about <Price cny={200} />, and something properly decent is around <Price cny={400} />. The <Price cny={70} /> Olympus in my bag was a lucky find, not the normal case, so don't go in expecting that.
+
+The reason film cameras are this cheap isn't only that most of them missed the hype. It's that they're simple. A mechanical camera is a box, a shutter, a spring and a lens. No sensor, no processor, no screen, no firmware, nothing to become obsolete. That's also why a <Price cny={950} /> AE-1 Program can do basically everything I'd ask a camera to do. Capable film gear is just cheap compared to capable digital gear, and it stays that way.
+
+Everything I own:
+
+- **Canon AE-1 Program, <Price cny={950} />.** My first camera, still the one I bring when I care.
+- **Snapic A1, <Price cny={700} />.** My main point and shoot. Not a good camera. But it's thin and sleek in a way the old ones aren't, and I carry it because of that.
+- **Olympus Trip Panorama 2, <Price cny={70} />.** The cheap one. Currently loaded with Lucky C400.
+- **A Lomography Sprocket Rocket.** One roll, too much hassle, never again.
+
+That's <Price cny={1720} /> for three cameras I use.
+
+<Figure src={wukangImg} alt="A Canon AE-1 Program held up in front of Wukang Mansion in Shanghai on a clear day" caption="The AE-1P outside Wukang Mansion, same roll of UltraMax as the photo further up." />
+
+An Olympus µ\[mju:\]-II, sold as the Stylus Epic in the US, costs about the same secondhand and is a better camera with a better lens. It's also bulkier. I chose sleek over sharp and I'm still not sure that was right, but I did carry the Snapic A1 every single day, which I'm not certain I'd have done with the mju.
+
+<Figure src={snapicImg} alt="A small white Snapic A1 point and shoot being lifted out of a jacket pocket" caption="This is the entire argument for the Snapic A1. It disappears into a pocket, so it's always there." />
+
+The mju is also a good example of what's happening to film cameras generally, which is hype. The Contax T2 and T3, the mju II, anything that got big on Instagram, all of it costs several times what it used to. Is the T3 a lovely camera? Yes. Is a big chunk of that price just the name on the front? Also yes, and it isn't correcting, because production ended decades ago and supply only shrinks.
+
+Which is the whole joke about my cheap camera. It's an Olympus too.
+
+<Figure
+	src={tripImg}
+	alt="An Olympus Trip Panorama 2 compact camera held up in one hand on a street in Macau"
+>
+	<Fragment slot="caption">
+		Olympus Trip Panorama 2, <Price cny={70} />, in Macau a few days ago. Same brand as the mju II, roughly one thirtieth of the price, and it's the camera I've actually been shooting with.
+	</Fragment>
+</Figure>
+
+The upside is that hype works in my favor. My AE-1P cost <Price cny={950} /> and will still be worth about <Price cny={950} /> in three years. Film bodies finished depreciating a long time ago, so buying one is closer to a deposit than a purchase.
+
+(While I'm here: disposables are the worst value in film. The Fuji and Kodak ones are around <Price cny={130} />, the cheaper ones are bad, and you get 27 frames through a molded plastic lens and then throw the camera away. For the same money buy a <Price cny={70} /> compact and a roll of Gold. That said, if you walk past one and want to try it, go ahead. It's still film and the experience is the same.)
+
+One scope note on all of this: everything here is 35mm. I do want to shoot medium format eventually, because a Hasselblad never gets old and the RB67 is very cool, but it's a different budget entirely and I'd rather get properly good at 35mm first. That's a post for a few years from now.
+
+## The camera I don't use
+
+In 2023 I signed up for the photography CCA at school, so I bought a used Sony a6500 with a lens for <Price cny={7500} />. Worst purchase I've made.
+
+I used it on a few trips and then stopped, and the reason matters more than the money. You come back from a day out with three or four hundred frames. Then you have to go through all of them and decide what's worth keeping, and then edit the survivors, and every part of that is tedious. So I'd get partway in, lose interest, and the photos would sit on a drive forever. It's also physically big, so even when I meant to bring it, often I just didn't.
+
+I called that a scam for a while and I've stopped. I paid roughly market rate for a camera that doesn't suit how I take pictures. That's a taste mistake, not a con, and it's still the most useful number in this post.
+
+It's a 2016 body worth maybe <Price cny={3200} /> now, so it's been quietly losing about <Price cny={1750} /> a year while sitting in a drawer. At <Price cny={106} /> a roll, that's sixteen rolls of film annually. **If you shoot less than about sixteen rolls a year, film costs you less than merely owning a digital camera you never pick up.**
+
+Meanwhile the <Price cny={70} /> Olympus is in my bag. Divide what each camera cost by how many photos it's actually produced and one comes out at a few yuan a frame while the other doesn't come out at all.
+
+## The obvious objections
+
+**Your phone is cheaper.** Obviously, and I'm not going to pretend this is close or work out iCloud costs per frame to make it look like a contest. Every photo on your phone is free. The iPhone camera has gotten good, not good-for-a-phone good, and it hands you a finished image for nothing extra because you were buying the phone anyway. If your only goal is cheap photographs, use your phone. But a phone and a film camera aren't really comparable in either direction. One isn't a cheaper version of the other, they're different things you pick up for different reasons.
+
+**You bought the wrong digital camera.** Fair, and small digital cameras are good. The Ricoh GR is great and people who own one actually carry it. It's also expensive, and again a lot of that is hype, the same pattern as the Contax on the digital side.
+
+**What about digicams?** The Y2K CCD trend has pushed old compacts to somewhere between <Price cny={800} /> and <Price cny={2000} />, more than plenty of film point and shoots, and people buy them because they're small and they like the retro look. That's the part I don't follow. If you want the retro look, shoot film. It's cheaper, more interesting, and you get the actual thing instead of a digital impression of it.
+
+## So here's the actual reason
+
+Everything above is accounting. This is the part that's true.
+
+I hate editing. Unedited digital looks bad, not broken exactly, just flat and unfinished. Unedited film looks like film. So when I hand the lab <Price cny={20} /> I'm not really paying for chemistry, I'm paying for a color grade I refuse to do myself. Ten keepers a roll, finished, ready to post.
+
+Thirty-six frames also makes me think before pressing the button, which is the exact opposite of what the Sony did to me.
+
+<Figure src={kyotoImg} alt="A Canon AE-1 Program with the lens removed, held up so the open mount frames a pagoda in Kyoto" caption="I took the lens off in Kyoto to see what the camera sees. Not useful. Very fun." />
+
+And beyond all that, it just feels good. The weight of it, winding on, not knowing what you got, the wait, the moment the scans land. Sometimes the colors come out wrong and I like them anyway. None of that is an argument. It's the real reason, and the math came afterward.
+
+## The other reason
+
+Shooting film is a personality, and I'm aware of how that sounds. It's still true, and it's most of why I'd tell someone else to try it.
+
+A film camera gets noticed. That's how this whole post started: someone spots it, asks if it's real, and then we're talking about something other than the weather. It happens with strangers and it happens with people I've known for years, who turn out to have a dead Pentax sitting at their parents' place. Nobody has ever asked me what's loaded in my phone.
+
+So it becomes a tag. I'm the guy who shoots film the way someone else is the running guy or the coffee guy, and when I turn up somewhere there's a conversation I never have to start.
+
+I've talked a few friends into it too, and the pitch is easy because it's cheap. <Price cny={200} /> for a point and shoot on Xianyu, <Price cny={106} /> a roll, and if you hate it you sell the camera for what you paid. Two of them stuck. Watching someone get their first scans back is better than getting my own, because they've spent two weeks not knowing, and then the whole roll arrives at once.
+
+That's also where [AvoidXray](https://avoidxray.com) came from. I wanted somewhere to keep track of what I'd shot and what I'd shot it on, and somewhere to read what other people made of a stock before spending <Price cny={148} /> on it, so I built it. It's a community for analog photographers: your cameras, notes on film stocks, and your scans somewhere that isn't Instagram. Every film link earlier in this post goes there, and [my photos live there too](https://avoidxray.com/zigaowang).
+
+None of that is in the accounting either.
+
+## When it doesn't work
+
+I should include the failure, because a post that only argues one direction isn't worth reading.
+
+I shot a roll of ORWO Wolfen NC400 and it came back wrong. Scanned it twice, got completely different colors each time, neither one good. I ended up fixing them with AI and [posting the comparison](https://www.instagram.com/p/DXCPnpMlLJW/).
+
+So I paid for a color grade, the grade came back broken twice, and I did the editing anyway. That's the real risk of this trade. You've handed your look to a lab and a film stock, and occasionally that fails and you end up doing exactly the thing you were paying to avoid.
+
+## So, is it expensive?
+
+Film isn't cheaper than digital. Anyone telling you it is has counted selectively.
+
+But expensive was always the wrong word, because nobody applies it consistently. A roll costs me <Price cny={106} />, five cups of milk tea. A vinyl record costs about the same, and nobody has ever asked whether records are cheaper than streaming, because that was obviously never why anyone buys records. Film is arguably the better deal of the two, since I come away with photographs rather than just a nice afternoon.
+
+Twenty rolls a year is <Price cny={2120} /> for maybe two hundred finished photos and a reason to walk around paying attention to things. Set against a <Price cny={7500} /> camera losing <Price cny={1750} /> a year in a drawer, that's a good deal.
+
+I just spend the money on the part that makes pictures instead of the part that sits at home.
+
+---
+
+*Prices checked August 2026 and quoted in CNY; the USD figures are approximate conversions at the rate shown by the toggle at the top. My lab and film shop are both in Shanghai, which explains most of these numbers. International figures converted roughly from [this r/AnalogCommunity thread](https://www.reddit.com/r/AnalogCommunity/comments/1nuxph2/how_much_are_you_paying_for_developing/) and [FilmPhotoDeveloping's 2026 lab pricing guide](https://filmphotodeveloping.com/blog/film-developing-cost-guide).*
