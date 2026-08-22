@@ -1,5 +1,5 @@
 ---
-import { formatFromUsd, formatMoney } from '../utils/currency';
+import { formatMoney } from '../utils/currency';
 
 /**
  * Interactive per-roll / per-keeper film cost calculator.
@@ -119,16 +119,12 @@ const barMax = Math.max(...labs.map((l) => l.cny), 20);
 
 	<ul class="lines">
 		<li>
-			<strong data-plain="frames">720</strong> frames a year, <strong data-plain="keeps">200</strong> of them worth keeping.
+			<strong data-plain="frames">720</strong> frames a year, <strong data-plain="keeps">200</strong> of them worth keeping,
+			at <strong data-out="perMonth" data-cny="177">{formatMoney(177, 'CNY')}</strong> a month.
 		</li>
 		<li>
 			A roll is <strong data-plain="teaRoll">5.3</strong> cups of milk tea at <span data-cny="20">{formatMoney(20, 'CNY')}</span> a cup.
 			Every photo you'd actually post costs <strong data-plain="teaKeeper">0.5</strong> of a cup.
-		</li>
-		<li>
-			<strong data-out="perMonth" data-cny="177">{formatMoney(177, 'CNY')}</strong> a month, which is
-			<strong data-plain="subs">26%</strong> of the <span data-usd="100">{formatFromUsd(100, 'CNY')}</span> AI
-			subscription I don't think twice about.
 		</li>
 		<li>
 			A disposable is <span data-cny="130">{formatMoney(130, 'CNY')}</span> for 27 frames, so
@@ -144,13 +140,12 @@ const barMax = Math.max(...labs.map((l) => l.cny), 20);
 </div>
 
 <script>
-	import { CNY_PER_USD, formatMoney, formatNumber, formatRatio, usdToCny, type Currency } from '../utils/currency';
+	import { CNY_PER_USD, formatMoney, formatNumber, formatRatio, type Currency } from '../utils/currency';
 
 	const calc = document.getElementById('film-calc');
 
 	if (calc) {
 		const MILK_TEA = 20;
-		const AI_SUB = usdToCny(100); // Claude Max 5x, natively a dollar price
 		const DISPOSABLE = 130;
 		const DISPOSABLE_FRAMES = 27;
 		const DEPRECIATION = 1750;
@@ -243,7 +238,6 @@ const barMax = Math.max(...labs.map((l) => l.cny), 20);
 			setPlain('keeps', formatNumber(keepers * state.rolls));
 			setPlain('teaRoll', formatRatio(perRoll / MILK_TEA));
 			setPlain('teaKeeper', formatRatio(perKeeper / MILK_TEA));
-			setPlain('subs', Math.round((perMonth / AI_SUB) * 100) + '%');
 			setPlain(
 				'dispo',
 				gap === 0 ? 'level with it' : gap > 0 ? `${gap}% under that` : `${Math.abs(gap)}% over it`,

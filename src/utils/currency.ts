@@ -27,9 +27,9 @@ export function usdToCny(usd: number): number {
 	return usd * CNY_PER_USD;
 }
 
-/** Like formatNumber, but small amounts keep their cents: 0.5 → "0.50", 92.04 → "92". */
+/** Like formatNumber, but small fractional amounts keep their cents: 0.5 → "0.50", 6 → "6". */
 function formatAmount(v: number): string {
-	if (Math.abs(v) > 0 && Math.abs(v) < 10) {
+	if (!Number.isInteger(v) && Math.abs(v) > 0 && Math.abs(v) < 10) {
 		return v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 	}
 	return formatNumber(v);
