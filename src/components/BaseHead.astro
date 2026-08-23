@@ -1,4 +1,5 @@
 ---
+import SpeedInsights from '@vercel/speed-insights/astro';
 import '../styles/global.css';
 import { SITE_TITLE } from '../consts';
 
@@ -30,6 +31,9 @@ const { title, description, image } = Astro.props;
 
 <!-- Analytics (Umami) -->
 <script defer src="https://cloud.umami.is/script.js" data-website-id="871a307e-509d-4fd9-8a34-306a385ad0f9"></script>
+
+<!-- Real-user Core Web Vitals (Vercel Speed Insights) -->
+<SpeedInsights />
 
 <!-- Google Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
