@@ -13,8 +13,22 @@ const today = new Date();
 	</div>
 	<div class="flag-strip">
 		<a href="https://info.flagcounter.com/FHXI" target="_blank" rel="noreferrer" aria-label="Visitor counter by country">
-			<img class="flag-desktop" src="https://s01.flagcounter.com/count/FHXI/bg_0c0c0c/txt_888888/border_1F1F1F/columns_6/maxflags_24/viewers_Hello+from/labels_1/pageviews_1/flags_0/percent_0/" alt="Visitors by country" onerror="this.closest('.flag-strip').style.display='none'" onload="if(this.naturalWidth<10)this.closest('.flag-strip').style.display='none'" />
-			<img class="flag-mobile" src="https://s01.flagcounter.com/count/FHXI/bg_0c0c0c/txt_888888/border_1F1F1F/columns_4/maxflags_12/viewers_Hello+from/labels_1/pageviews_1/flags_0/percent_0/" alt="Visitors by country" onerror="this.closest('.flag-strip').style.display='none'" onload="if(this.naturalWidth<10)this.closest('.flag-strip').style.display='none'" />
+			<!-- <picture> so the browser fetches ONE variant. Two <img> tags with
+			     display:none still download both. -->
+			<picture>
+				<source
+					media="(max-width: 600px)"
+					srcset="https://s01.flagcounter.com/count/FHXI/bg_0c0c0c/txt_888888/border_1F1F1F/columns_4/maxflags_12/viewers_Hello+from/labels_1/pageviews_1/flags_0/percent_0/"
+				/>
+				<img
+					src="https://s01.flagcounter.com/count/FHXI/bg_0c0c0c/txt_888888/border_1F1F1F/columns_6/maxflags_24/viewers_Hello+from/labels_1/pageviews_1/flags_0/percent_0/"
+					alt="Visitors by country"
+					loading="lazy"
+					decoding="async"
+					onerror="this.closest('.flag-strip').style.display='none'"
+					onload="if(this.naturalWidth<10)this.closest('.flag-strip').style.display='none'"
+				/>
+			</picture>
 		</a>
 	</div>
 </footer>
@@ -76,13 +90,10 @@ const today = new Date();
 		height: auto;
 		border-radius: 0;
 	}
-	.flag-mobile { display: none !important; }
 
 	@media (max-width: 600px) {
 		footer { padding: 2rem var(--px) 2rem; }
 		.flag-strip { margin-top: 2.5rem; }
 		.flag-strip a { max-width: 100%; }
-		.flag-desktop { display: none !important; }
-		.flag-mobile { display: block !important; }
 	}
 </style>
