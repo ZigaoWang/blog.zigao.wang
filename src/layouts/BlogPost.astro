@@ -24,13 +24,25 @@ type Props = CollectionEntry<'blog'>['data'] & {
 	nextPost?: PostLink;
 };
 
-const { title, description, pubDate, updatedDate, category, tags, rating, author, heroImage, readTime, prevPost, nextPost } = Astro.props;
+const { title, description, pubDate, updatedDate, category, tags, rating, author, heroImage, readTime, lang = 'en', prevPost, nextPost } = Astro.props;
 const isBook = category === 'Books';
 ---
 
-<html lang="en">
+<html lang={lang}>
 	<head>
-		<BaseHead title={title} description={description} image={heroImage?.src} />
+		<BaseHead
+			title={title}
+			description={description}
+			image={heroImage?.src}
+			type="article"
+			publishedTime={pubDate}
+			modifiedTime={updatedDate}
+			category={category}
+			tags={tags}
+			bookAuthor={isBook ? author : undefined}
+			rating={rating}
+			lang={lang}
+		/>
 	</head>
 	<body>
 		<Header />

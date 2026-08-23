@@ -15,6 +15,9 @@ const blog = defineCollection({
 			tags: z.array(z.string()).optional(),
 			rating: z.number().min(1).max(5).optional(),
 			author: z.string().optional(),
+			// BCP 47 language tag for the post body, used for <html lang> and
+			// og:locale. Chinese posts were previously served as lang="en".
+			lang: z.string().default('en'),
 		}),
 });
 
