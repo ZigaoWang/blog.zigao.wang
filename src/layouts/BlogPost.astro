@@ -113,6 +113,19 @@ const ogImage = `/og/${slug}.jpg`;
 						</header>
 					)}
 
+					{!isBook && heroImage && (
+						<figure class="post-hero">
+							<Image
+								src={heroImage}
+								alt=""
+								widths={[840, 1680]}
+								sizes="(max-width: 880px) 100vw, 840px"
+								loading="eager"
+								fetchpriority="high"
+							/>
+						</figure>
+					)}
+
 					<div class="prose" id="prose-content">
 						<slot />
 					</div>
@@ -725,17 +738,69 @@ const ogImage = `/og/${slug}.jpg`;
 		.pn-desc { -webkit-line-clamp: 2; }
 	}
 
-	.prose { line-height: 1.8; font-size: 1rem; }
-	.prose :global(h2) { margin-top: 2.5rem; margin-bottom: 0.6rem; scroll-margin-top: 5rem; }
-	.prose :global(h3) { margin-top: 1.75rem; margin-bottom: 0.5rem; scroll-margin-top: 5rem; }
-	.prose :global(p) { margin-bottom: 1.2rem; }
+	/* Hero sits between the header and the body, full article width. */
+	.post-hero { margin: 0 0 2.75rem; }
+	.post-hero :global(img) {
+		display: block;
+		width: 100%;
+		height: auto;
+	}
+
+	.prose {
+		font-size: 1.0625rem;   /* 17px — 16 is tight for long-form */
+		line-height: 1.8;
+	}
+	.prose :global(p) { margin-bottom: 1.35em; }
+
+	/* Sections need to announce themselves: bigger h2, more air above than
+	   below, so a heading binds to the text it introduces. */
+	.prose :global(h2) {
+		font-size: 1.65rem;
+		line-height: 1.25;
+		letter-spacing: -0.02em;
+		margin-top: 3rem;
+		margin-bottom: 0.7rem;
+		scroll-margin-top: 5rem;
+	}
+	.prose :global(h3) {
+		font-size: 1.25rem;
+		line-height: 1.35;
+		margin-top: 2.15rem;
+		margin-bottom: 0.5rem;
+		scroll-margin-top: 5rem;
+	}
+	.prose :global(h2 + p),
+	.prose :global(h3 + p) { margin-top: 0; }
+
 	.prose :global(ul),
-	.prose :global(ol) { margin-bottom: 1.2rem; padding-left: 1.5rem; }
-	.prose :global(li) { margin-bottom: 0.35rem; }
-	.prose :global(figure) { margin: 2rem 0; }
+	.prose :global(ol) { margin-bottom: 1.35em; padding-left: 1.4em; }
+	.prose :global(li) { margin-bottom: 0.5em; padding-left: 0.15em; }
+	.prose :global(li)::marker { color: var(--text-secondary); }
+	.prose :global(li > ul),
+	.prose :global(li > ol) { margin: 0.5em 0 0; }
+
+	/* Pull-quote weight: full-strength text, not greyed out. */
+	.prose :global(blockquote) {
+		margin: 2em 0;
+		padding: 0.15em 0 0.15em 1.35rem;
+		border-left: 2px solid #333;
+		color: var(--text);
+		font-style: normal;
+		opacity: 0.92;
+	}
+	.prose :global(blockquote p) { margin-bottom: 0.7em; }
+	.prose :global(blockquote p:last-child) { margin-bottom: 0; }
+
+	.prose :global(a) {
+		text-decoration-thickness: 1px;
+		text-underline-offset: 0.2em;
+	}
+
+	.prose :global(figure) { margin: 2.4em 0; }
 	.prose :global(.photo-small) { max-width: 400px; margin-left: auto; margin-right: auto; }
-	.prose :global(pre) { margin: 1.75rem 0; }
-	.prose :global(hr) { margin: 2.5rem 0; }
+	.prose :global(pre) { margin: 2em 0; }
+	.prose :global(hr) { margin: 3em 0; }
+	.prose :global(table) { margin: 2em 0; font-size: 0.95rem; }
 
 	/* ══════════════════════════════
 	   Responsive
