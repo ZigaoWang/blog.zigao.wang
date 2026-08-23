@@ -64,8 +64,13 @@ const ogImage = await ogImageFor();
 		margin: 0 0 0.3rem;
 	}
 	.lead { color: var(--text-secondary); margin: 0 0 2rem; }
-	.post-list { display: flex; flex-direction: column; }
-	.post-list > * + * { margin-top: 1rem; }
+	.post-list {
+		display: flex;
+		flex-direction: column;
+		/* gap, not "> * + *": Astro scopes sibling selectors to the page
+		   hash, which no longer matches PostCard-scoped children. */
+		gap: 1rem;
+	}
 
 	@media (max-width: 600px) {
 		main { padding-top: 2.5rem; }

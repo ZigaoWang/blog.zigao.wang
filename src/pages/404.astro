@@ -68,8 +68,13 @@ const recentPosts = (await getCollection('blog'))
 		margin: 0;
 	}
 
-	.post-list { display: flex; flex-direction: column; }
-	.post-list > * + * { margin-top: 1rem; }
+	.post-list {
+		display: flex;
+		flex-direction: column;
+		/* gap, not "> * + *": Astro scopes sibling selectors to the page
+		   hash, which no longer matches PostCard-scoped children. */
+		gap: 1rem;
+	}
 
 	.actions {
 		display: flex;

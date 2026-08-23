@@ -131,9 +131,9 @@ const categories = [...new Set(posts.map((p) => p.data.category).filter(Boolean)
 	.post-list {
 		display: flex;
 		flex-direction: column;
-	}
-	.post-list > * + * {
-		margin-top: 1rem;
+		/* gap, not "> * + *": Astro scopes sibling selectors to the page
+		   hash, which no longer matches PostCard-scoped children. */
+		gap: 1rem;
 	}
 	.empty {
 		color: var(--text-secondary);

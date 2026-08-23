@@ -640,8 +640,13 @@ const gearPreview = [
 	.social:hover { color: var(--text); }
 	.social svg { width: 18px; height: 18px; display: block; flex-shrink: 0; }
 
-	.post-list { display: flex; flex-direction: column; }
-	.post-list > * + * { margin-top: 1rem; }
+	.post-list {
+		display: flex;
+		flex-direction: column;
+		/* gap, not "> * + *": Astro scopes sibling selectors to the page
+		   hash, which no longer matches PostCard-scoped children. */
+		gap: 1rem;
+	}
 
 	@media (max-width: 700px) {
 		.hero { height: auto; min-height: 560px; }

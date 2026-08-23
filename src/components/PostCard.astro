@@ -132,8 +132,15 @@ const readTime = getReadTime(post.body);
 		font-size: 0.78rem;
 		color: var(--text-secondary);
 		flex-wrap: wrap;
+		/* gap, not "> *": FormattedDate and StarRating render their own
+		   elements, which don't carry this component's scope hash. */
+		gap: 0.15rem 0.4rem;
 	}
-	.foot > * { margin-right: 0.4rem; }
+	.rating-wrap {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+	}
 	.dot { opacity: 0.4; }
 
 	@media (max-width: 600px) {
