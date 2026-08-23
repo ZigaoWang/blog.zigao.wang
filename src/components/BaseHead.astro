@@ -128,7 +128,7 @@ const ogLocale = lang.includes('-')
 	: { en: 'en_US', zh: 'zh_CN' }[lang] ?? lang;
 ---
 
-<!-- Global Metadata -->
+{/* Global Metadata */}
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <link rel="icon" type="image/png" href="/favicon.png" />
@@ -143,28 +143,28 @@ const ogLocale = lang.includes('-')
 />
 <meta name="generator" content={Astro.generator} />
 
-<!-- Analytics (Umami) -->
+{/* Analytics (Umami) */}
 <script defer src="https://cloud.umami.is/script.js" data-website-id="871a307e-509d-4fd9-8a34-306a385ad0f9"></script>
 
-<!-- Real-user Core Web Vitals (Vercel Speed Insights) -->
+{/* Real-user Core Web Vitals (Vercel Speed Insights) */}
 <SpeedInsights />
 
-<!-- Fonts are self-hosted (see global.css). Preload only the faces that
-     render above the fold; the rest load on demand via @font-face. -->
+{/* Fonts are self-hosted (see global.css). Preload only the faces that
+     render above the fold; the rest load on demand via @font-face. */}
 <link rel="preload" href="/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preload" href="/fonts/newsreader-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preload" href="/fonts/ZigaoHand-Regular.woff2" as="font" type="font/woff2" crossorigin />
 
-<!-- Canonical URL -->
+{/* Canonical URL */}
 <link rel="canonical" href={canonicalURL} />
 
-<!-- Primary Meta Tags -->
+{/* Primary Meta Tags */}
 <title>{title}</title>
 <meta name="title" content={title} />
 <meta name="description" content={description} />
 <meta name="author" content={AUTHOR.name} />
 
-<!-- Open Graph / Facebook -->
+{/* Open Graph / Facebook */}
 <meta property="og:type" content={isArticle ? 'article' : 'website'} />
 <meta property="og:site_name" content={SITE_TITLE} />
 <meta property="og:locale" content={ogLocale} />
@@ -184,7 +184,7 @@ const ogLocale = lang.includes('-')
 {isArticle && category && <meta property="article:section" content={category} />}
 {isArticle && tags?.map((tag) => <meta property="article:tag" content={tag} />)}
 
-<!-- Twitter -->
+{/* Twitter */}
 <meta property="twitter:card" content={imageURL ? 'summary_large_image' : 'summary'} />
 <meta property="twitter:url" content={canonicalURL} />
 <meta property="twitter:title" content={title} />
@@ -192,5 +192,5 @@ const ogLocale = lang.includes('-')
 <meta property="twitter:creator" content="@zigaow" />
 {imageURL && <meta property="twitter:image" content={imageURL} />}
 
-<!-- Structured data -->
+{/* Structured data */}
 <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
