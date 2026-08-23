@@ -15,6 +15,15 @@ const ogImage = await ogImageFor();
 const posts = (await getCollection('blog')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
+
+// Derived from the collection rather than hardcoded — a post in a new
+// category would previously have been unreachable from the filter bar.
+const categories = [...new Set(posts.map((p) => p.data.category).filter(Boolean))]
+	.map((name) => ({
+		name: name as string,
+		count: posts.filter((p) => p.data.category === name).length,
+	}))
+	.sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
 ---
 
 <!doctype html>
@@ -26,14 +35,19 @@ const posts = (await getCollection('blog')).sort(
 		<Header />
 		<main>
 			<h1>Posts</h1>
-			<div class="filters" id="filters">
-				<button class="filter active" data-filter="all">All</button>
-				<button class="filter" data-filter="Books">Books</button>
-				<button class="filter" data-filter="Tech">Tech</button>
-				<button class="filter" data-filter="Life">Life</button>
+			<div class="filters" id="filters" role="group" aria-label="Filter posts by category">
+				<button class="filter active" data-filter="all" aria-pressed="true">
+					All <span class="count">{posts.length}</span>
+				</button>
+				{categories.map((c) => (
+					<button class="filter" data-filter={c.name} aria-pressed="false">
+						{c.name} <span class="count">{c.count}</span>
+					</button>
+				))}
 			</div>
 			<section>
 				{posts.length === 0 && <p class="empty">Nothing here yet.</p>}
+				<p class="empty" id="no-matches" hidden>No posts in this category yet.</p>
 				<div class="post-list">
 					{posts.map((post) => {
 						const isBook = post.data.category === 'Books';
@@ -88,21 +102,48 @@ const posts = (await getCollection('blog')).sort(
 		<script>
 			const filters = document.querySelectorAll<HTMLButtonElement>('.filter');
 			const cards = document.querySelectorAll<HTMLElement>('.card');
+			const noMatches = document.getElementById('no-matches');
+
+			const known = new Set(Array.from(filters, (b) => b.dataset.filter));
+
+			function apply(category: string) {
+				let shown = 0;
+				cards.forEach((card) => {
+					const match = category === 'all' || card.dataset.category === category;
+					card.hidden = !match;
+					if (match) shown++;
+				});
+
+				filters.forEach((b) => {
+					const active = b.dataset.filter === category;
+					b.classList.toggle('active', active);
+					// Screen readers get the state, not just the colour change.
+					b.setAttribute('aria-pressed', String(active));
+				});
+
+				if (noMatches) noMatches.hidden = shown > 0;
+			}
+
+			// ?category=Books makes a filtered view linkable and shareable.
+			function fromURL(): string {
+				const value = new URLSearchParams(location.search).get('category');
+				return value && known.has(value) ? value : 'all';
+			}
 
 			filters.forEach((btn) => {
 				btn.addEventListener('click', () => {
-					filters.forEach((b) => b.classList.remove('active'));
-					btn.classList.add('active');
-					const cat = btn.dataset.filter;
-					cards.forEach((card) => {
-						if (cat === 'all' || card.dataset.category === cat) {
-							card.style.display = '';
-						} else {
-							card.style.display = 'none';
-						}
-					});
+					const category = btn.dataset.filter ?? 'all';
+					apply(category);
+					const url = new URL(location.href);
+					if (category === 'all') url.searchParams.delete('category');
+					else url.searchParams.set('category', category);
+					// pushState so the back button steps through filters.
+					history.pushState({ category }, '', url);
 				});
 			});
+
+			window.addEventListener('popstate', () => apply(fromURL()));
+			apply(fromURL());
 		</script>
 	</body>
 </html>
@@ -128,6 +169,12 @@ const posts = (await getCollection('blog')).sort(
 	}
 	.filter:hover { color: var(--text); border-color: var(--text-secondary); }
 	.filter.active { background: var(--text); color: var(--bg); border-color: var(--text); }
+	.filter .count {
+		font-variant-numeric: tabular-nums;
+		opacity: 0.55;
+		margin-left: 0.15rem;
+		font-size: 0.94em;
+	}
 	.post-list {
 		display: flex;
 		flex-direction: column;
