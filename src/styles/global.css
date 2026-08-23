@@ -86,6 +86,10 @@
 	--border: #1f1f1f;
 	--link: #93b4f5;
 	--code-bg: #161616;
+
+	/* Tells the browser to render native UI — scrollbars, form controls,
+	   spinners — in dark mode instead of defaulting to light. */
+	color-scheme: dark;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; }
