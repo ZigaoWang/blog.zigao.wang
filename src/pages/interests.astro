@@ -5,17 +5,23 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import { SITE_TITLE } from '../consts';
+import canonAe1Img from '../assets/cameras/canon-ae1.webp';
+import snapicA1Img from '../assets/cameras/snapic-a1.webp';
+import sprocketRocketImg from '../assets/cameras/sprocket-rocket.webp';
+import yts480Img from '../assets/gear/yts480.png';
+import akaiMpkImg from '../assets/gear/akai-mpk-mini-4.png';
+import turntableImg from '../assets/gear/audio-technica-at-lp60xbt.webp';
 
 const cameras = [
-	{ name: 'Canon AE-1 Program', meta: '35mm SLR · FD 50mm f/1.8', img: '/cameras/canon-ae1.webp', url: 'https://avoidxray.com/cameras/cmjz3yhxh00076w5vft97mlfu' },
-	{ name: 'Snapic A1', meta: 'Kodak point-and-shoot · 25mm', img: '/cameras/snapic-a1.webp', url: 'https://avoidxray.com/cameras/cmkkzyoqa000b6wi7ew4bskje' },
-	{ name: 'Sprocket Rocket', meta: 'Lomography · 35mm panoramic', img: '/cameras/sprocket-rocket.webp', url: 'https://avoidxray.com/cameras/cmm2pgqqa0001h1ep1qd7h7qg' },
+	{ name: 'Canon AE-1 Program', meta: '35mm SLR · FD 50mm f/1.8', img: canonAe1Img, url: 'https://avoidxray.com/cameras/cmjz3yhxh00076w5vft97mlfu' },
+	{ name: 'Snapic A1', meta: 'Kodak point-and-shoot · 25mm', img: snapicA1Img, url: 'https://avoidxray.com/cameras/cmkkzyoqa000b6wi7ew4bskje' },
+	{ name: 'Sprocket Rocket', meta: 'Lomography · 35mm panoramic', img: sprocketRocketImg, url: 'https://avoidxray.com/cameras/cmm2pgqqa0001h1ep1qd7h7qg' },
 ];
 
 const gear = [
-	{ name: 'Yamaha YTS-480', meta: 'Intermediate tenor saxophone.', img: '/gear/yts480.png', url: 'https://usa.yamaha.com/products/musical_instruments/winds/saxophones/yts-480/index.html' },
-	{ name: 'Akai MPK Mini 4', meta: 'MIDI controller, learning live looping.', img: '/gear/akai-mpk-mini-4.png', url: 'https://www.akaipro.com/mpk-mini-4/' },
-	{ name: 'AT-LP60XBTa', meta: 'Belt-drive turntable for vinyl.', img: '/gear/audio-technica-at-lp60xbt.webp', url: 'https://www.audio-technica.com.hk/index.php?op=productdetails&pid=1459&cid=30&sid=52&lang=eng' },
+	{ name: 'Yamaha YTS-480', meta: 'Intermediate tenor saxophone.', img: yts480Img, url: 'https://usa.yamaha.com/products/musical_instruments/winds/saxophones/yts-480/index.html' },
+	{ name: 'Akai MPK Mini 4', meta: 'MIDI controller, learning live looping.', img: akaiMpkImg, url: 'https://www.akaipro.com/mpk-mini-4/' },
+	{ name: 'AT-LP60XBTa', meta: 'Belt-drive turntable for vinyl.', img: turntableImg, url: 'https://www.audio-technica.com.hk/index.php?op=productdetails&pid=1459&cid=30&sid=52&lang=eng' },
 ];
 
 const books = (await getCollection('blog'))
@@ -42,7 +48,7 @@ const books = (await getCollection('blog'))
 					<div class="gear three">
 						{cameras.map((c) => (
 							<a class="g-card" href={c.url} target="_blank" rel="noreferrer">
-								<div class="g-photo"><img src={c.img} alt={c.name} loading="lazy" /></div>
+								<div class="g-photo"><Image src={c.img} alt={c.name} width={260} densities={[1, 2]} loading="lazy" /></div>
 								<div class="g-meta">
 									<h3>{c.name}</h3>
 									<p>{c.meta}</p>
@@ -61,7 +67,7 @@ const books = (await getCollection('blog'))
 						{gear.map((g) => (
 							g.url ? (
 								<a class="g-card" href={g.url} target="_blank" rel="noreferrer">
-									<div class="g-photo"><img src={g.img} alt={g.name} loading="lazy" /></div>
+									<div class="g-photo"><Image src={g.img} alt={g.name} width={260} densities={[1, 2]} loading="lazy" /></div>
 									<div class="g-meta">
 										<h3>{g.name}</h3>
 										<p>{g.meta}</p>
@@ -69,7 +75,7 @@ const books = (await getCollection('blog'))
 								</a>
 							) : (
 								<div class="g-card no-link">
-									<div class="g-photo"><img src={g.img} alt={g.name} loading="lazy" /></div>
+									<div class="g-photo"><Image src={g.img} alt={g.name} width={260} densities={[1, 2]} loading="lazy" /></div>
 									<div class="g-meta">
 										<h3>{g.name}</h3>
 										<p>{g.meta}</p>
@@ -188,7 +194,7 @@ const books = (await getCollection('blog'))
 		padding: 1.25rem;
 		background: transparent;
 	}
-	.g-photo img {
+	.g-photo :global(img) {
 		max-width: 100%;
 		max-height: 100%;
 		object-fit: contain;

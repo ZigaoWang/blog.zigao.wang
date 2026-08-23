@@ -7,6 +7,12 @@ import FormattedDate from '../components/FormattedDate.astro';
 import StarRating from '../components/StarRating.astro';
 import { getReadTime } from '../utils/readTime';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import profileImg from '../assets/profile.png';
+import avoidxrayImg from '../assets/projects/avoidxray.webp';
+import z1chatImg from '../assets/projects/z1chat.webp';
+import canonAe1Img from '../assets/cameras/canon-ae1.webp';
+import yts480Img from '../assets/gear/yts480.png';
+import turntableImg from '../assets/gear/audio-technica-at-lp60xbt.webp';
 
 const latestPosts = (await getCollection('blog'))
 	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
@@ -17,7 +23,7 @@ const featuredProjects = [
 		name: 'AvoidXray',
 		url: 'https://avoidxray.com',
 		src: 'https://github.com/ZigaoWang/avoidxray.com',
-		img: '/projects/avoidxray.webp',
+		img: avoidxrayImg,
 		imgPosition: 'top',
 		tagline: 'A community website for film photographers.',
 		detail: 'Browse and share full-res scans, sorted by camera and film stock, so you can see exactly what any film looks like before you shoot it.',
@@ -26,7 +32,7 @@ const featuredProjects = [
 		name: 'z1.chat',
 		url: 'https://z1.chat',
 		src: 'https://github.com/ZigaoWang/z1.chat',
-		img: '/projects/z1chat.webp',
+		img: z1chatImg,
 		imgPosition: 'top',
 		tagline: 'A full AI chat platform built from scratch.',
 		detail: 'Multiple models, cross-chat memory, web search, a sandbox that runs code, and artifacts that render HTML and diagrams. Pay-as-you-go, no subscription.',
@@ -41,9 +47,9 @@ const iosProjects = [
 ];
 
 const gearPreview = [
-	{ name: 'Canon AE-1 Program', meta: '35mm SLR', img: '/cameras/canon-ae1.webp' },
-	{ name: 'Yamaha YTS-480', meta: 'Jazz band', img: '/gear/yts480.png' },
-	{ name: 'AT-LP60XBTa', meta: 'Vinyl turntable', img: '/gear/audio-technica-at-lp60xbt.webp' },
+	{ name: 'Canon AE-1 Program', meta: '35mm SLR', img: canonAe1Img },
+	{ name: 'Yamaha YTS-480', meta: 'Jazz band', img: yts480Img },
+	{ name: 'AT-LP60XBTa', meta: 'Vinyl turntable', img: turntableImg },
 ];
 ---
 
@@ -67,7 +73,7 @@ const gearPreview = [
 					</p>
 					<p class="tagline">Student developer and maker in Shanghai.</p>
 				</div>
-				<img class="profile-pic" src="/profile.png" alt="Zigao Wang" width="168" height="168" />
+				<Image class="profile-pic" src={profileImg} alt="Zigao Wang" width={168} height={168} densities={[1, 2]} loading="eager" />
 			</div>
 		</div>
 		<audio id="pron-audio" src="/pronunciation.mp3" preload="none"></audio>
@@ -80,7 +86,7 @@ const gearPreview = [
 						<div class="feat-card">
 							<a class="feat-card-link" href={p.url} target="_blank" rel="noreferrer" aria-label={`Visit ${p.name}`}></a>
 							<div class="feat-img">
-								<img src={p.img} alt={`${p.name} screenshot`} loading="lazy" style={`object-position: ${p.imgPosition}`} />
+								<Image src={p.img} alt={`${p.name} screenshot`} width={420} densities={[1, 2]} loading="lazy" style={`object-position: ${p.imgPosition}`} />
 							</div>
 							<div class="feat-body">
 								<div class="feat-title-row">
@@ -181,7 +187,7 @@ const gearPreview = [
 					<div class="gear-preview">
 						{gearPreview.map((g) => (
 							<div class="g-card">
-								<div class="g-photo"><img src={g.img} alt={g.name} loading="lazy" /></div>
+								<div class="g-photo"><Image src={g.img} alt={g.name} width={260} densities={[1, 2]} loading="lazy" /></div>
 								<div class="g-meta">
 									<h3>{g.name}</h3>
 									<p>{g.meta}</p>
@@ -375,7 +381,7 @@ const gearPreview = [
 		background: #111;
 		border-bottom: 1px solid var(--border);
 	}
-	.feat-img img {
+	.feat-img :global(img) {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
@@ -623,7 +629,7 @@ const gearPreview = [
 		justify-content: center;
 		padding: 1rem;
 	}
-	.gear-preview .g-photo img {
+	.gear-preview .g-photo :global(img) {
 		max-width: 100%;
 		max-height: 100%;
 		object-fit: contain;
