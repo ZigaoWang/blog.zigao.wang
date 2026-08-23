@@ -1,5 +1,5 @@
 ---
-import { Image, getImage } from 'astro:assets';
+import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
@@ -8,6 +8,7 @@ import StarRating from '../components/StarRating.astro';
 import { getReadTime } from '../utils/readTime';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 import bgImg from '../assets/bg.jpg';
+import { ogImageFor } from '../utils/og';
 import profileImg from '../assets/profile.png';
 import avoidxrayImg from '../assets/projects/avoidxray.webp';
 import z1chatImg from '../assets/projects/z1chat.webp';
@@ -47,8 +48,7 @@ const iosProjects = [
 	{ name: 'Out Loud', url: 'https://out-loud.app/', urlLabel: 'Visit site', desc: 'A voice recording app with real-time transcription and AI analysis.', src: 'https://github.com/ZigaoWang/out-loud-app' },
 ];
 
-// Social cards want a modestly sized JPEG, not the full 2000px hero.
-const ogImage = await getImage({ src: bgImg, width: 1200, format: 'jpeg' });
+const ogImage = await ogImageFor();
 
 const gearPreview = [
 	{ name: 'Canon AE-1 Program', meta: '35mm SLR', img: canonAe1Img },
@@ -60,7 +60,7 @@ const gearPreview = [
 <!doctype html>
 <html lang="en">
 	<head>
-		<BaseHead title={`${SITE_TITLE} — Student Developer & Maker in Shanghai`} description={SITE_DESCRIPTION} image={ogImage.src} />
+		<BaseHead title={`${SITE_TITLE} — Student Developer & Maker in Shanghai`} description={SITE_DESCRIPTION} image={ogImage} />
 	</head>
 	<body>
 		<div class="hero">

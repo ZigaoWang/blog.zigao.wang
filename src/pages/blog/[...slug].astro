@@ -59,6 +59,6 @@ const { Content } = await render(post);
 const readTime = getReadTime(post.body);
 ---
 
-<BlogPost {...post.data} readTime={readTime} prevPost={prevPost} nextPost={nextPost}>
+<BlogPost {...post.data} slug={post.id} readTime={readTime} prevPost={prevPost} nextPost={nextPost}>
 	<Content />
 </BlogPost>

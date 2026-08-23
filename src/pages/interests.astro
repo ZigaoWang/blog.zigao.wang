@@ -11,6 +11,9 @@ import sprocketRocketImg from '../assets/cameras/sprocket-rocket.webp';
 import yts480Img from '../assets/gear/yts480.png';
 import akaiMpkImg from '../assets/gear/akai-mpk-mini-4.png';
 import turntableImg from '../assets/gear/audio-technica-at-lp60xbt.webp';
+import { ogImageFor } from '../utils/og';
+
+const ogImage = await ogImageFor();
 
 const cameras = [
 	{ name: 'Canon AE-1 Program', meta: '35mm SLR · FD 50mm f/1.8', img: canonAe1Img, url: 'https://avoidxray.com/cameras/cmjz3yhxh00076w5vft97mlfu' },
@@ -32,7 +35,7 @@ const books = (await getCollection('blog'))
 <!doctype html>
 <html lang="en">
 	<head>
-		<BaseHead title={`Interests — ${SITE_TITLE}`} description="Film photography, music, running, drama, building, reading, travel." />
+		<BaseHead title={`Interests — ${SITE_TITLE}`} description="Film photography, music, running, drama, building, reading, travel." image={ogImage} />
 	</head>
 	<body>
 		<Header />

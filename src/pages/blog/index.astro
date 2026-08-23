@@ -8,6 +8,9 @@ import Header from '../../components/Header.astro';
 import StarRating from '../../components/StarRating.astro';
 import { getReadTime } from '../../utils/readTime';
 import { BLOG_DESCRIPTION, BLOG_TITLE } from '../../consts';
+import { ogImageFor } from '../../utils/og';
+
+const ogImage = await ogImageFor();
 
 const posts = (await getCollection('blog')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
@@ -17,7 +20,7 @@ const posts = (await getCollection('blog')).sort(
 <!doctype html>
 <html lang="en">
 	<head>
-		<BaseHead title={BLOG_TITLE} description={BLOG_DESCRIPTION} />
+		<BaseHead title={BLOG_TITLE} description={BLOG_DESCRIPTION} image={ogImage} />
 	</head>
 	<body>
 		<Header />

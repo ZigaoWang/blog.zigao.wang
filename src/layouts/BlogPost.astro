@@ -19,13 +19,16 @@ type PostLink = {
 	kind: 'prev' | 'next' | 'suggested';
 } | null;
 type Props = CollectionEntry<'blog'>['data'] & {
+	slug: string;
 	readTime?: number;
 	prevPost?: PostLink;
 	nextPost?: PostLink;
 };
 
-const { title, description, pubDate, updatedDate, category, tags, rating, author, heroImage, readTime, lang = 'en', prevPost, nextPost } = Astro.props;
+const { title, description, pubDate, updatedDate, category, tags, rating, author, heroImage, readTime, lang = 'en', slug, prevPost, nextPost } = Astro.props;
 const isBook = category === 'Books';
+// Generated at build time by src/pages/og/[...slug].jpg.ts
+const ogImage = `/og/${slug}.jpg`;
 ---
 
 <html lang={lang}>
@@ -33,7 +36,7 @@ const isBook = category === 'Books';
 		<BaseHead
 			title={title}
 			description={description}
-			image={heroImage?.src}
+			image={ogImage}
 			type="article"
 			publishedTime={pubDate}
 			modifiedTime={updatedDate}
