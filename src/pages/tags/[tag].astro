@@ -1,0 +1,74 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import PostCard from '../../components/PostCard.astro';
+import { SITE_TITLE } from '../../consts';
+import { collectTags, postsWithTag } from '../../utils/tags';
+import { ogImageFor } from '../../utils/og';
+
+export async function getStaticPaths() {
+	const posts = (await getCollection('blog')).sort(
+		(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+	);
+	return collectTags(posts).map((tag) => ({
+		params: { tag: tag.slug },
+		props: { tag, posts: postsWithTag(posts, tag.slug) },
+	}));
+}
+
+const { tag, posts } = Astro.props;
+const ogImage = await ogImageFor();
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead
+			title={`#${tag.name} — ${SITE_TITLE}`}
+			description={`${posts.length} ${posts.length === 1 ? 'post' : 'posts'} tagged ${tag.name}.`}
+			image={ogImage}
+		/>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<a href="/tags" class="back">&larr; All tags</a>
+			<h1>#{tag.name}</h1>
+			<p class="lead">{posts.length} {posts.length === 1 ? 'post' : 'posts'}</p>
+
+			<div class="post-list">
+				{posts.map((post) => <PostCard post={post} />)}
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	main { padding-top: 3.5rem; padding-bottom: 4.5rem; }
+	.back {
+		display: inline-block;
+		font-size: 0.85rem;
+		color: var(--text-secondary);
+		text-decoration: none;
+		margin-bottom: 1.75rem;
+	}
+	.back:hover { color: var(--text); }
+	h1 {
+		font-family: var(--font-serif);
+		font-weight: 400;
+		font-size: 2.4rem;
+		letter-spacing: -0.025em;
+		margin: 0 0 0.3rem;
+	}
+	.lead { color: var(--text-secondary); margin: 0 0 2rem; }
+	.post-list { display: flex; flex-direction: column; }
+	.post-list > * + * { margin-top: 1rem; }
+
+	@media (max-width: 600px) {
+		main { padding-top: 2.5rem; }
+		h1 { font-size: 2rem; }
+	}
+</style>

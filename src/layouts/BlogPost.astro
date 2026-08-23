@@ -8,6 +8,7 @@ import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 import Lightbox from '../components/Lightbox.astro';
 import StarRating from '../components/StarRating.astro';
+import { tagSlug } from '../utils/tags';
 
 type PostLink = {
 	id: string;
@@ -118,7 +119,7 @@ const ogImage = `/og/${slug}.jpg`;
 					{tags && tags.length > 0 && (
 						<div class="tags">
 							{tags.map((tag) => (
-								<span class="tag">#{tag}</span>
+								<a class="tag" href={`/tags/${tagSlug(tag)}/`}>#{tag}</a>
 							))}
 						</div>
 					)}
@@ -609,7 +610,12 @@ const ogImage = `/og/${slug}.jpg`;
 		color: var(--text-secondary);
 		background: rgba(255,255,255,0.05);
 		padding: 0.25rem 0.6rem;
-		border-radius: 0;
+		text-decoration: none;
+		transition: background 0.15s, color 0.15s;
+	}
+	.tag:hover {
+		background: rgba(255,255,255,0.09);
+		color: var(--text);
 	}
 
 	.share {

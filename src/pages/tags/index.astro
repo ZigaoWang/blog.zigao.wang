@@ -1,0 +1,93 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import { SITE_TITLE } from '../../consts';
+import { collectTags } from '../../utils/tags';
+import { ogImageFor } from '../../utils/og';
+
+const posts = await getCollection('blog');
+const tags = collectTags(posts);
+const ogImage = await ogImageFor();
+const max = Math.max(...tags.map((t) => t.count), 1);
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead
+			title={`Tags — ${SITE_TITLE}`}
+			description={`Every topic written about on the blog — ${tags.length} tags across ${posts.length} posts.`}
+			image={ogImage}
+		/>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<h1>Tags</h1>
+			<p class="lead">{tags.length} topics across {posts.length} posts.</p>
+
+			<ul class="tag-cloud">
+				{tags.map((tag) => (
+					<li>
+						<a
+							href={`/tags/${tag.slug}/`}
+							class:list={['tag', { prominent: tag.count === max && max > 1 }]}
+						>
+							<span class="name">{tag.name}</span>
+							<span class="count">{tag.count}</span>
+						</a>
+					</li>
+				))}
+			</ul>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	main { padding-top: 3.5rem; padding-bottom: 4.5rem; }
+	h1 {
+		font-family: var(--font-serif);
+		font-weight: 400;
+		font-size: 2.4rem;
+		letter-spacing: -0.025em;
+		margin: 0 0 0.4rem;
+	}
+	.lead { color: var(--text-secondary); margin: 0 0 2rem; }
+
+	.tag-cloud {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.6rem;
+	}
+	.tag {
+		display: inline-flex;
+		align-items: baseline;
+		gap: 0.45rem;
+		padding: 0.45rem 0.85rem;
+		background: var(--surface);
+		border: 1px solid var(--border);
+		color: var(--text);
+		text-decoration: none;
+		font-size: 0.92rem;
+		transition: background 0.15s, border-color 0.15s;
+	}
+	.tag:hover { background: var(--surface-hover); border-color: var(--text-secondary); }
+	.tag .name::before { content: '#'; opacity: 0.4; margin-right: 0.1rem; }
+	.tag .count {
+		font-size: 0.78rem;
+		color: var(--text-secondary);
+		font-variant-numeric: tabular-nums;
+	}
+	.tag.prominent { border-color: #2a2a2a; }
+
+	@media (max-width: 600px) {
+		main { padding-top: 2.5rem; }
+		h1 { font-size: 2rem; }
+	}
+</style>
