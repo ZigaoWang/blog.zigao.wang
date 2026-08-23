@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
@@ -7,6 +7,7 @@ import FormattedDate from '../components/FormattedDate.astro';
 import StarRating from '../components/StarRating.astro';
 import { getReadTime } from '../utils/readTime';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import bgImg from '../assets/bg.jpg';
 import profileImg from '../assets/profile.png';
 import avoidxrayImg from '../assets/projects/avoidxray.webp';
 import z1chatImg from '../assets/projects/z1chat.webp';
@@ -46,6 +47,9 @@ const iosProjects = [
 	{ name: 'Out Loud', url: 'https://out-loud.app/', urlLabel: 'Visit site', desc: 'A voice recording app with real-time transcription and AI analysis.', src: 'https://github.com/ZigaoWang/out-loud-app' },
 ];
 
+// Social cards want a modestly sized JPEG, not the full 2000px hero.
+const ogImage = await getImage({ src: bgImg, width: 1200, format: 'jpeg' });
+
 const gearPreview = [
 	{ name: 'Canon AE-1 Program', meta: '35mm SLR', img: canonAe1Img },
 	{ name: 'Yamaha YTS-480', meta: 'Jazz band', img: yts480Img },
@@ -56,10 +60,20 @@ const gearPreview = [
 <!doctype html>
 <html lang="en">
 	<head>
-		<BaseHead title={`${SITE_TITLE} — Student Developer & Maker in Shanghai`} description={SITE_DESCRIPTION} image="/bg.jpg" />
+		<BaseHead title={`${SITE_TITLE} — Student Developer & Maker in Shanghai`} description={SITE_DESCRIPTION} image={ogImage.src} />
 	</head>
 	<body>
 		<div class="hero">
+			<Image
+				class="hero-bg"
+				src={bgImg}
+				alt=""
+				widths={[800, 1400, 2000]}
+				sizes="100vw"
+				quality={72}
+				loading="eager"
+				fetchpriority="high"
+			/>
 			<div class="hero-overlay"></div>
 			<div class="hero-fade"></div>
 			<div class="hero-content">
@@ -238,10 +252,19 @@ const gearPreview = [
 	.hero {
 		position: relative;
 		height: 680px;
-		background: url('/bg.jpg') center 38% / cover no-repeat;
+		background-color: #0c0c0c;
 		display: flex;
 		align-items: flex-end;
 		overflow: hidden;
+	}
+	.hero-bg {
+		position: absolute;
+		inset: 0;
+		z-index: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: center 38%;
 	}
 	.hero-overlay {
 		position: absolute;
