@@ -4,19 +4,61 @@ import BlogPost from '../../layouts/BlogPost.astro';
 import { getReadTime } from '../../utils/readTime';
 
 export async function getStaticPaths() {
-	const posts = await getCollection('blog');
-	return posts.map((post) => ({
-		params: { slug: post.id },
-		props: post,
-	}));
-}
-type Props = CollectionEntry<'blog'>;
+	// Newest first, so index+1 is the older post and index-1 the newer one.
+	const posts = (await getCollection('blog')).sort(
+		(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+	);
+	const link = (p: CollectionEntry<'blog'> | undefined, kind: 'prev' | 'next' | 'suggested') =>
+		p
+			? {
+					id: p.id,
+					title: p.data.title,
+					description: p.data.description,
+					category: p.data.category ?? null,
+					heroImage: p.data.heroImage ?? null,
+					readTime: getReadTime(p.body),
+					kind,
+				}
+			: null;
 
-const post = Astro.props;
+	// The newest and oldest posts have no neighbour on one side. Rather than
+	// leave a gap, fill it with the closest post in the same category (falling
+	// back to closest by date). Deterministic on purpose — a static build picks
+	// once, so randomness would just reshuffle arbitrarily on every deploy.
+	const suggest = (post: CollectionEntry<'blog'>, taken: (string | undefined)[]) => {
+		const eligible = posts.filter((p) => p.id !== post.id && !taken.includes(p.id));
+		const sameCategory = eligible.filter((p) => p.data.category === post.data.category);
+		const pool = sameCategory.length ? sameCategory : eligible;
+		return [...pool].sort(
+			(a, b) =>
+				Math.abs(a.data.pubDate.valueOf() - post.data.pubDate.valueOf()) -
+				Math.abs(b.data.pubDate.valueOf() - post.data.pubDate.valueOf()),
+		)[0];
+	};
+
+	return posts.map((post, i) => {
+		const older = posts[i + 1];
+		const newer = posts[i - 1];
+		return {
+			params: { slug: post.id },
+			props: {
+				post,
+				prevPost: older
+					? link(older, 'prev')
+					: link(suggest(post, [newer?.id]), 'suggested'),
+				nextPost: newer
+					? link(newer, 'next')
+					: link(suggest(post, [older?.id]), 'suggested'),
+			},
+		};
+	});
+}
+
+const { post, prevPost, nextPost } = Astro.props;
 const { Content } = await render(post);
 const readTime = getReadTime(post.body);
 ---
 
-<BlogPost {...post.data} readTime={readTime}>
+<BlogPost {...post.data} readTime={readTime} prevPost={prevPost} nextPost={nextPost}>
 	<Content />
 </BlogPost>
