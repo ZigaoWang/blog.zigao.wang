@@ -93,7 +93,9 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; }
-html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: no-preference) {
+	html { scroll-behavior: smooth; }
+}
 ::selection { background: #2a4a7f; color: #fff; }
 
 body {
