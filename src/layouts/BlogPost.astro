@@ -67,6 +67,19 @@ const ogImage = `/og/${slug}.jpg`;
 				<article>
 					<a href="/blog" class="back">&larr; All posts</a>
 
+					{!isBook && heroImage && (
+						<figure class="post-hero">
+							<Image
+								src={heroImage}
+								alt=""
+								widths={[840, 1680]}
+								sizes="(max-width: 880px) 100vw, 840px"
+								loading="eager"
+								fetchpriority="high"
+							/>
+						</figure>
+					)}
+
 					{isBook && heroImage ? (
 						<header class="book-header">
 							<div class="book-cover-wrap">
@@ -111,19 +124,6 @@ const ogImage = `/og/${slug}.jpg`;
 							<h1>{title}</h1>
 							{description && <p class="desc">{description}</p>}
 						</header>
-					)}
-
-					{!isBook && heroImage && (
-						<figure class="post-hero">
-							<Image
-								src={heroImage}
-								alt=""
-								widths={[840, 1680]}
-								sizes="(max-width: 880px) 100vw, 840px"
-								loading="eager"
-								fetchpriority="high"
-							/>
-						</figure>
 					)}
 
 					<div class="prose" id="prose-content">
@@ -739,17 +739,13 @@ const ogImage = `/og/${slug}.jpg`;
 	}
 
 	/* Hero sits between the header and the body, full article width. */
-	/* Whole image, never cropped: bound the height and let width scale with
-	   it. A full-width hero at natural aspect would run ~630px tall and push
-	   the opening paragraph off-screen. */
-	.post-hero { margin: 0 0 2rem; }
+	/* Full content width at natural aspect — the standard editorial hero.
+	   Bounding the height instead left the image floating in gutters. */
+	.post-hero { margin: 0 0 1.75rem; }
 	.post-hero :global(img) {
 		display: block;
-		width: auto;
+		width: 100%;
 		height: auto;
-		max-width: 100%;
-		max-height: 420px;
-		margin-inline: auto;
 	}
 
 	.prose {
