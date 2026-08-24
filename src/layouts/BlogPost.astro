@@ -739,15 +739,17 @@ const ogImage = `/og/${slug}.jpg`;
 	}
 
 	/* Hero sits between the header and the body, full article width. */
-	/* Banner, not a full-bleed photo — a tall hero pushes the first
-	   paragraph off-screen and makes every post feel like a scroll. */
+	/* Whole image, never cropped: bound the height and let width scale with
+	   it. A full-width hero at natural aspect would run ~630px tall and push
+	   the opening paragraph off-screen. */
 	.post-hero { margin: 0 0 2rem; }
 	.post-hero :global(img) {
 		display: block;
-		width: 100%;
+		width: auto;
 		height: auto;
-		max-height: 300px;
-		object-fit: cover;
+		max-width: 100%;
+		max-height: 420px;
+		margin-inline: auto;
 	}
 
 	.prose {
