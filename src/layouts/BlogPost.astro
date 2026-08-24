@@ -739,13 +739,16 @@ const ogImage = `/og/${slug}.jpg`;
 	}
 
 	/* Hero sits between the header and the body, full article width. */
-	/* Full content width at natural aspect — the standard editorial hero.
-	   Bounding the height instead left the image floating in gutters. */
+	/* 2:1 banner — the standard editorial hero shape. Natural aspect ran
+	   594px on the 4:3 photos, which dominated the top of every post. */
 	.post-hero { margin: 0 0 1.75rem; }
 	.post-hero :global(img) {
 		display: block;
 		width: 100%;
 		height: auto;
+		aspect-ratio: 2 / 1;
+		object-fit: cover;
+		object-position: center;
 	}
 
 	.prose {
