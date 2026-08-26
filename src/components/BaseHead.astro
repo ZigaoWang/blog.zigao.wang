@@ -1,4 +1,5 @@
 ---
+import { Analytics } from '@vercel/analytics/astro';
 import SpeedInsights from '@vercel/speed-insights/astro';
 import '../styles/global.css';
 import { AUTHOR, SITE_TITLE, SITE_URL } from '../consts';
@@ -148,6 +149,9 @@ const ogLocale = lang.includes('-')
 
 {/* Real-user Core Web Vitals (Vercel Speed Insights) */}
 <SpeedInsights />
+
+{/* Vercel Web Analytics */}
+<Analytics />
 
 {/* Fonts are self-hosted (see global.css). Preload only the faces that
      render above the fold; the rest load on demand via @font-face. */}
